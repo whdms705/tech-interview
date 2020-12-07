@@ -300,3 +300,193 @@ NOSQL에서 테이블과 같은 개념으로 컬렉션이라는 형태로 데이
 ※수직적 확장? 수평적 확장?  
 * 수직적 확장이란 기존의 서버를 더 좋은 H/W로 바꾸는 방법(scale up)  
 * 수평적 확장은 기존에 사용하던 서버 외에 서버를 추가하여 성능을 높이는 방법(scale out)
+
+
+-----------------------------------------------------------------------
+
+### 샤딩
+* 샤딩은 수평 분할(Horizontal Partitioning)과 동일하며, 인덱스의 크기를 줄이고, 작업 동시성을 늘리기 위한 것이다.
+
+* 수평 분할(Horizontal Partitioning)이란 스키마(schema)가 같은 데이터를 두 개 이상의 테이블에 나누어 저장하는 디자인을 말한다. 
+
+* 가령 같은 주민 데이터를 처리하기 위해 스키마가 같은 '서현동주민 테이블'과 '정자동주민 테이블'을 사용하는 것을 말한다. 
+
+* 데이터베이스를 샤딩하게 되면 기존에 하나로 구성될 스키마를 다수의 복제본으로 구성하고 각각의 샤드에 어떤 데이터가 저장될지를 샤드키를 기준으로 분리한다.
+
+
+![A](imgs/db_Sharding.PNG)  
+
+
+>> 프로그래밍, 운영적인 복잡도는 더 높아지는 단점이 있습니다.
+
+`가능하면 Sharding을 피하거나 지연시킬 수 있는 방법을 찾는 것이 우선되어야 합니다.`
+
+* Scale-in
+>> Hardware Spec이 더 좋은 컴퓨터를 사용합니다.
+
+* Read 부하가 크다면?
+>> Cache나 Database의 Replication을 적용하는 것도 하나의 방법입니다.
+
+* Table의 일부 컬럼만 자주 사용한다면?
+>> Vertically Partition도 하나의 방법입니다.
+>Data를 Hot, Warm, Cold Data로 분리하는 것입니다.
+
+
+
+`기본개념을 넘어 좀더 자세히 알자보자면!!`
+
+>> 분산된 DB에서 어떻게 Data를 읽어오기 위해 `Shard Key`에 대한 방식을 선택해야 한다.
+
+**`Algorithm Sharding`**
+
+![A](imgs/db_hash_sharding.PNG)  
+
+* Database id를 단순하게 나누어 샤딩하는 방식
+* Sharding Key는 hash(key) % NUM_DB 같은 방식
+
+`장점`
+같은 값을 가지는 key-value 데이터베이스에 적합하다.
+
+`단점`
+Cluster를 포함하는 Node 갯수가 변하게 되면 Resharding이 필요하다.
+Hash Key로 분산되기 때문에 공간에 대한 효율이 부족하다.
+
+
+
+**`Dynamic Sharding`**
+
+![A](imgs/db_dynamic_sharding.PNG)  
+
+* 클라이언트는 Locator Service에 접근하여 Shard Key를 얻는다.
+
+`장점`
+Cluster가 포함하는 Node 갯수가 변하면 Shard Key를 추가하기만 하면 된다.
+
+>> 확장에 유연하게 대처가능하다.
+
+`단점`
+Data Relocation시에는 Locator Service의 Shard key Table도 일치시켜야 한다.
+
+>> Locator에 의존할 수 밖에 없는 구조이다.
+
+
+
+**`Entity Group`**
+
+![A](imgs/db_entity_sharding.PNG)  
+
+* Database id를 단순하게 나누어 샤딩하는 방식
+* Sharding Key는 hash(key) % NUM_DB 같은 방식
+
+`장점`
+같은 값을 가지는 key-value 데이터베이스에 적합하다.
+
+`단점`
+Cluster를 포함하는 Node 갯수가 변하게 되면 Resharding이 필요하다.
+Hash Key로 분산되기 때문에 공간에 대한 효율이 부족하다.
+
+`출저`
+https://sophia2730.tistory.com/entry/Databases-Database-Sharding%EC%83%A4%EB%94%A9
+
+
+-----------------------------------------------------------------------
+
+
+### Replication
+* 2개 이상의 DBMS를 Master와 Slave로 나누어 동일한 데이터를 저장한다.
+
+* Master DB는 Insert, Update, Delete의 기능을 수행하고, Slave DB에 실제 데이터를 복사한다.
+
+* Slave DB 시간이 오래걸리는 Select문의 기능을 수행하여 전체적인 Select문 성능을 향상시킨다.
+
+`DB 이중화`
+* master db에서는 insert , update ,delete 작업 , slave db에서는 read용으로 사용
+* mysql replication을 통해 데이터 복제
+
+![A](https://github.com/whdms705/local_front/blob/master/imgs/mysql1.png)  
+
+`replication 장점`
+* DB 서버 부하 분산
+* master db 장애시 slave db로 대체 가능
+
+`replication 단점`
+* Master-Slave pair 관리:서버들이 많아질 경우, Master와 Slave의 짝을 관리하는 것이 쉽지 않다.
+
+* 실패 상황에서의 복구 : Master가 실패시 Master와 Slave의 교체, 혹은 Slave의 데이터를 Master로 복사하는 등의 작업을 수동으로 진행하여야 한다. Slave의 실패인 경우도 마찬가지이다.
+
+* binary log의 관리: Master 에 쌓이는 binary log에 대한 관리 또한 수동으로 처리하여야 한다.(cron등을 이용하여 정기적인 삭제 필요)
+
+* replication 지연발생: Master의 처리량이 많은 경우 Slave는 지연시간이 발생하게 되고 그 시간동안의 데이터는 일치하지 않는 문제가 있다.
+
+-----------------------------------------------------------------------
+
+### 파티셔닝
+VLDB(Very large DBMS)
+
+*전체 DB가 하나의 DBMS시스템에 다 들어가기 힘들어지는 경우 
+>> 테이블 들을 여러 개의 군으로 나눠 분산 저장 
+* 하나의 테이블이 방대한 경우에는 사전방식과 같이 나눠 저장 
+
+`파티셔닝`
+*DBMS 레벨 분할
+
+`샤딩`
+*DBMS 외부에서 분할 / 응용레벨에서 구별해야 함
+
+`이점`
+* 데이터 전체 검색시 필요한 부분만 탐색해 성능 증가
+
+*전체 데이터를 손실할 가능성이 줄어듦 -> 가용성향상
+
+*파티션별 백업/복구 가능
+
+*파티션 단위로 I/O 분산가능 -> 업데이트 성능 증가 
+
+`방식`
+*범위(range) a-m/n-r/s-z
+
+*해시(hash) 해시함수 파티션별로 크기를 비슷하게 나눔
+
+*리스트(list) 특정한 컬럼을 기준
+
+
+EX) Card  테이블에 연도 (CreationTime) 컬럼을 추가하고 파티셔닝하시오.
+
+```mysql
+create table businessCard(ID INT NoT Null, Name varchar(255), Address varchar(255) ,
+ Telephone varchar(255) , CreateTime DATE)
+ 
+PARTITION BY RANGE(YEAR(CreationTime)) (
+PARTITION p0 VALUES LESS THAN(2013),
+PARTITION p1 VALUES LESS THAN(2014),
+PARTITION p2 VALUES LESS THAN(2015),
+PARTITION p3 VALUES LESS THAN MAXVALUE);  
+```
+
+
+**파티션 추가 와 삭제** 
+
+```mysql
+ALTER TABLE Card ADD PARTITION(PARTITION p4 VALUES LESS THAN(2005));
+ 
+ALTER TABLE Card DROP PARTOTION p4;
+```
+
+**파티션 분할 / 병합**
+
+```mysql
+ALTER TABLE CardREORGANIZE
+ PARTITION p3 INTO(PARTITION p3 VALUES LESS THAN(2015),
+PARTITION p4 VALUES LESS THAN MAXVALUE);
+```
+
+>> 파시션을 하여 정보를 나누웠는데도 P3에 데이터가 많은 경우 P3을 P3 ,P4로 더욱 분할하는 경우
+
+
+```mysql
+ALTER TABLE Card
+REORGANIZE PARTITION p2,p3
+ INTO(PATITION p23 VALUES LESS THAN(2014));
+```
+ 
+>> 파티션을 P2 , P3으로 만들었지만 데이터가 적어서 P23으로 병합하는 경우
