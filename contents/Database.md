@@ -389,7 +389,7 @@ Data Relocation시에는 Locator Service의 Shard key Table도 일치시켜야 �
 Cluster를 포함하는 Node 갯수가 변하게 되면 Resharding이 필요하다.
 Hash Key로 분산되기 때문에 공간에 대한 효율이 부족하다.
 
-`출저`
+`출처`
 https://sophia2730.tistory.com/entry/Databases-Database-Sharding%EC%83%A4%EB%94%A9
 
 

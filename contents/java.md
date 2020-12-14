@@ -67,7 +67,7 @@ java Map 인터페이스 구현체의 종류 ,java Set 인터페이스 구현체
 
 *** 또한, JIT 컴파일러는 같은 코드를 매번 해석하지 않고, 실행할 때 컴파일을 하면서 해당 코드를 캐싱해버린다. 이후에는 바뀐 부분만 컴파일하고, 나머지는 캐싱된 코드를 사용한다.** 
 
-`출저`
+`출처`
 https://blog.naver.com/software705/220645590756
 
 
@@ -150,7 +150,7 @@ ex). getter ,setter
 
 * StringBuilder(가변)
 비동기방식이기 때문에 Single Thread 환경하에서, 변화되는 문자열의 사용한다.
-동기방식이기 때문에 처리속도는 제일 빠르다.
+비동기방식이기 때문에 처리속도는 제일 빠르다.
 
 * StringBuffer(가변)
 동기방식으로 저장되기 때문에 멀티쓰레드로 접근하거나 문자열이 변경될 경우에 사용한다.
@@ -478,7 +478,7 @@ major gc는 빨리 실행하기 위해 여러 테크닉이 존재하지만 결�
 > 종료자는 사용하면 안 된다. 예측이 불가능하고 대체로 위험하고 일반적으로 필요하지 않다.
 
 
-`출저`
+`출처`
 https://blog.naver.com/software705/221369217211
 
 ### 리플렉션이란
@@ -533,7 +533,7 @@ Class.forName("oracle.jdbc.driver.OracleDriver");
 >> spring framework을 만든 java의 핵심 기술은 리플렉션과 다이나믹 프록시 2가지이다.
 
 
-`출저`
+`출처`
 https://blog.naver.com/software705/221369217211
 
 ###Wrapper class
@@ -566,7 +566,7 @@ https://blog.naver.com/software705/221369217211
 > 기본형을 박싱하면 생기는 오버헤드때문에 성능이 기본형으로 처리하는 경우보다 상당히 떨어진다.
 
 
-`출저`
+`출처`
 https://coding-factory.tistory.com/547
 
 
@@ -685,7 +685,7 @@ example)
 @interface: 어노테이션 선언할 때 사용<br>
 
 
-`출저`
+`출처`
 https://sjh836.tistory.com/8
 
 ------------------------------------------------
@@ -734,7 +734,7 @@ Static 변수와 상수 정보들이 저장되는 공간으로 흔히 메타데�
 |메모리 튜닝|Heap, Perm 영역 튜닝|Heap 튜닝, *Native 영역은 OS가 동적 조정*|
 
 
-`출저`
+`출처`
 https://johngrib.github.io/wiki/java8-why-permgen-removed/
 
 ------------------------------------------------

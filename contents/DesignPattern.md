@@ -107,10 +107,10 @@ public class SkeletonResponse {
 ```
 
 
-java8이상부터라면 인터페이스를 사용해도 될거 같은데 정리가 잘 된 사아트가 았어 남겨놨습니다.(아래의 출저 사이트를 참)
+java8이상부터라면 인터페이스를 사용해도 될거 같은데 정리가 잘 된 사아트가 았어 남겨놨습니다.(아래의 출처 사이트를 참)
 
 
-`출저`
+`출처`
 https://yaboong.github.io/design-pattern/2018/09/27/template-method-pattern/
 
 ---

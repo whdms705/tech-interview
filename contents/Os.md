@@ -696,7 +696,7 @@ MMU 는 세그먼트 테이블로 CPU 에서 할당한 논리 주소에 해당�
 
  ---
 
-##### 출저
+##### 출처
 
 `메모리 관리 :`
 https://dheldh77.tistory.com/entry/%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C%EB%A9%94%EB%AA%A8%EB%A6%AC-%EA%B4%80%EB%A6%AC-%EC%A0%84%EB%9E%B5Memory-Management-Strategy<br>
