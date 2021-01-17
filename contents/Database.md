@@ -159,6 +159,14 @@ https://medium.com/@wonderful.dev/isolation-level-%EC%9D%B4%ED%95%B4%ED%95%98%EA
 * 수식이나 함수 등으로 인덱스 컬럼 절을 변형하였을 경우  
 * 반드시 함수나 수식을 사용해야하는 경우에는 인덱스 컬럼에 적용하지 말고, 대입되는 컬럼이나 상수에 적용해야 한다.  
 
+**원인**<br>
+column 이 변형이 되여 있고 index는 대문자 소문자 혹은 대소문자 혼합되여<br>
+구성되여 있을것이고 그리고 그것을 소트하여 인덱스를 만들어 놓았는데<br>
+그것을 대문자로 변형   홍길동을 찾으라고 하면    해당 table을 전체를 full scan 하게 된다<br>
+<br>
+처음부터 입력된 값을 대문자만 들어가게 table을 설계 했던지 아니면 table의 입력 값이
+전부 소문자면 소문자로 변형 처리 하면 인덱스의 변형은 되지 않는다<br>
+
 ```oracle
 SELECT column_name FROM table_name WHERE TO_CHAR(column_name, 'YYYYMMDD') = '20201204';
 > SELECT column_name FROM table_name WHERE column_name = TO_DATE('20201204', YYYYMMDD);
@@ -183,7 +191,7 @@ SELECT column_name FROM table_name WHERE column_name  = 100;
 #### 3. 조건절에 NULL 또는 NOT NULL 을 사용하는 경우
 * 기본적으로 인덱스를 구성한 컬럼 값이 전부 NULL 이라면 인덱스는 null 값을 저장하지 않음. 
 따라서 NULL 인 값이 많지 않아 인덱스를 통해 엑세스를 하고자 한다면 데이터 생성 시 디폴트로 0과 같이 데이터를 만들어주 는 것이 좋다. 
-만약, NOT NULL 이 분석 대상이라면 해당 컬럼을 NULL 허용 컬럼으로 두는 것이 좋다.  
+만약, NOT NULL 이 분석 대상이라면 해당 컬럼을 NULL 허용 컬럼으로 두는 것이 좋다.
 
 ```oracle
 SELECT column_name FROM table_name WHERE column_name IS NULL;
@@ -196,6 +204,13 @@ SELECT column_name FROM table_name WHERE column_name >= 0;
   
 #### 4. 부정형으로 조건을 사용한 경우
 * 부정문은 인덱스를 활용하지 못한다.
+
+**원인**<br>
+예를 들어 CAR가 아닌 것을 조회하라고 한다면<br>
+무었 무었을 찾아라 가 아니고  CAR 가 아닌 것이 무었인지 모르지만 그것을 찾아라<br>
+이런 문장은 CAR가 아닌것이 무었인지 전부 찾아 보아라 하는 말이다<br>
+
+
 ```oracle
 SELECT column_name FROM table_name WHERE column_name != 30;
 >SELECT column_name FROM table_name WHERE column_name < 30 AND column_name > 30;
