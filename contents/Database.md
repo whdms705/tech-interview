@@ -19,6 +19,7 @@
 * [clustered Index/Nonclustered Index](#clustered_Index)
 * [mybatis # $ 차이점](#mybatis)
 * [innoDB myisam 차이점](#innoDB_myisam_차이점)
+* [database timeout](#timeout)
 
 ---
 
@@ -654,3 +655,23 @@ cf ) .https://chrisjune-13837.medium.com/db-lock-%EB%9D%BD%EC%9D%B4%EB%9E%80-%EB
 * 성능상의 단점이 존재한다.
 * 쿼리 주입 예방이 되지 않아 보안상 좋지 않다.
 * 테이블,칼럼명을 파라미터로 전달 할 때 사용한다.
+
+
+### database timeout
+
+`TransactionTimeout`<br>
+>> 전체 Statement 수행 시간을 허용할 수 있는 최대 시간 이내로 제한하려 할 때 TransactionTimeout을 사용한다.
+
+`StatementTimeout`<br>
+>> Statement 하나가 얼마나 오래 수행되어도 괜찮은지에 대한 한계 값이다.
+
+* 요즘 개발 환경에서는 개발자가 직접 StatementTimeout을 Java 코드로 설정하는 경우는 드물며, 프레임워크를 이용하여 해결하는 경우가 많다
+* iBatis를 예로 들어 설명하자면 "sql-map-config.xml" 파일의 sqlMapConfig/settings에 @defaultStatementTimeout 값으로 기본값을 설정할 수 있다
+* "sql-map.xml" 파일의 statement, select, insert, update 구문마다 @timeout 값으로 개별적으로 설정할 수 있다
+
+`JDBC 드라이버의 SocketTimeout`<br>
+>> JDBC 드라이버의 SocketTimeout 값은 DBMS가 비정상으로 종료되었거나 네트워크 장애(기기 장애 등)가 발생했을 때 필요한 값이다.
+
+* TCP/IP의 구조상 소켓에는 네트워크의 장애를 감지할 수 있는 방법이 없다. 그렇기 때문에 애플리케이션은 DBMS와의 연결 끊김을 알 수 없다.
+* 이럴 때 SocketTimeout이 설정되어 있지 않다면 애플리케이션은 DBMS로부터의 결과를 무한정 기다릴 수도 있다(Dead Connection이라고 부르기도 한다)
+* SocketTimeout 값은 StatementTimeout 값보다는 크게 설정해야 한다.

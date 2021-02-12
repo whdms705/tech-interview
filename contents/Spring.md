@@ -11,6 +11,7 @@
 * DI(Dependency Injection, 의존성 주입)란
 * AOP(Aspect Oriented Programming)란
 * Filter와 Interceptor 차이
+* [spring bean 생명주기]
 
 
 ### Block/Non-Block
@@ -133,3 +134,88 @@ IOC(Inversion of Control) : 의존 관계 주입(Dependency Injection)이라고�
 ### Filter와 Interceptor 차이
 spring mvc lifecycle와 함께 Filter와 Interceptor에 대해 읽기 편하게 정리된 사이트가 있다.
 : https://velog.io/@damiano1027/Spring-Spring-MVC-Request-Lifecycle
+
+
+
+### spring bean 생명주기
+
+`BeanFactory 간단정리`<br>
+1. 빈 객체 생성
+2. BeanNameAware.setBeanName()
+    >> <bean>의 id/name 속성에 지정된 값 전달
+    * 스프링에서 관리되는 bean 내부에서 id나 name이 무엇으로 지정되어 있는지 확인하는 경우 BeanNameAware Interface를 구현한다.
+    * 이때 그림의 노란색 부분처럼 bean생성과 property 의존성 주입을 완료한 이후, init method를 수행하기 전 시점에 호출된다.
+    
+3. BeanFactoryAware.setBeanFactory()
+    >> bean객체에 bean을 관리하는 BeanFactory 객체 전달
+    
+4. BeanPostProcessor의 초기화 전처리
+    >> 아래의  두 메서드를 적용하여 빈이 초기화 되기전 빈의 상태 조사 , 수정 , 확인등의 작업을 할 수 있습니다.
+    * postProcessBeforeInitialization
+    
+```java
+    public class ProductCheckBeanPostProcessor implements BeanPostProcessor {
+    
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName)
+            throws BeansException {
+        if (bean instanceof Product) {
+            System.out.println();
+            String productName = ((Product) bean).getName();
+            System.out.println("In ProductCheckBeanPostProcessor.postProcessBeforeInitialization, processing Product: " + productName);
+        }
+        return bean;
+    }
+    
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName)
+            throws BeansException {
+        if (bean instanceof Product) {
+            System.out.println();
+            String productName = ((Product) bean).getName();
+            System.out.println("In ProductCheckBeanPostProcessor.postProcessAfterInitialization, processing Product: " + productName);
+        }
+        return bean;
+    }
+    }
+```
+
+5. 커스텀 init - method
+    * @PostConstruct
+    
+6. InitializingBean.afterPropertiesSet()
+7. BeanPostProcessor의 초기화 후처리
+    >> 아래의  두 메서드를 적용하여 빈이 초기화 된 후 빈의 상태 조사 , 수정 , 확인등의 작업을 할 수 있습니다.
+    * postProcessAfterInitialization
+    
+8. 빈 객체 사용
+9. DisposableBean.destroy()
+10. 커스텀 destroy - method  2_8_ii
+
+
+`BeanFactory 공식문서`<br>
+1. BeanNameAware's setBeanName
+2. BeanClassLoaderAware's setBeanClassLoader
+3. BeanFactoryAware's setBeanFactory
+4. EnvironmentAware's setEnvironment
+5. EmbeddedValueResolverAware's setEmbeddedValueResolver
+6. ResourceLoaderAware's setResourceLoader
+7. ApplicationEventPublisherAware's setApplicationEventPublisher
+8. MessageSourceAware's setMessageSource
+9. ApplicationContextAware's setApplicationContext
+10. ServletContextAware's setServletContext
+11. postProcessBeforeInitialization methods of BeanPostProcessors
+12. InitializingBean's afterPropertiesSet (here!)
+13. a custom init-method definition
+14. postProcessAfterInitialization methods of BeanPostProcessors
+
+
+
+
+
+
+
+
+
+
+
