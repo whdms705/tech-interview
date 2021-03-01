@@ -893,7 +893,7 @@ public class Person {
   > 에러의 예로는 OutOfMemoryError, ThreadDeath, StackOverflowError 등이 있다.
 
 #### CheckedException과 UnCheckedException의 차이
-![A](imgs/error_exception.PNG)  
+![A](imgs/error_exception.png)  
 - Checked Exception : RuntimeException을 상속 X / 예외처리 필수
   Unchecked Exception : RuntimeException을 상속 O / 예외처리 안해도 됨
 - RuntimeException과 이를 상속한 클래스(Unchecked Exception)를 조금 특별하게 취급한다. 명시적으로 예외 처리를 하지 않아도 되기 때문이다.
