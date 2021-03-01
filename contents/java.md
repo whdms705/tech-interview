@@ -537,7 +537,7 @@ Class.forName("oracle.jdbc.driver.OracleDriver");
 `출처`
 https://blog.naver.com/software705/221369217211
 
-###Wrapper class
+### Wrapper class
 
 기본 자료타입(primitive type)을 객체로 다루기 위해서 사용하는 클래스들을 래퍼 클래스(wrapper class)라고 합니다. 
 
