@@ -11,7 +11,8 @@
 * DI(Dependency Injection, 의존성 주입)란
 * AOP(Aspect Oriented Programming)란
 * Filter와 Interceptor 차이
-* [spring bean 생명주기]
+* [spring bean 생명주기](#spring_bean_생명주기)
+* [spring bean scope](#spring_bean_scope)
 
 
 ### Block/Non-Block
@@ -21,6 +22,9 @@
 
 * Non-Block(막다)상황
 제어권이 호출자에서 함수를 실행해도(함수가 실행중이여도) 호출자에게 바로 제어권이 넘어간다.<br>
+
+
+-----------------------------------------------------------------------
 
 
 ### Sync/Async
@@ -37,6 +41,9 @@
 
 제어권의 반환 =><br>
            결과값 전달 =><br>
+
+
+-----------------------------------------------------------------------
            
            
 ### 스프링_프레임워크는_왜_생긴_것인가
@@ -65,6 +72,10 @@ Framework이 없었다면 개발자들은 처음부터 끝까지 직접 모든 �
 정리 짱짱 잘되어 있다!<br>
 cf) https://dreamingdreamer.tistory.com/125
 
+
+-----------------------------------------------------------------------
+
+
 ### spring Di
 >> 제어의 역행(IOC)으로 특정 객체에 필요한 다른 객체를 외부에서 결정해서 연결시키는 것. 
 
@@ -72,6 +83,9 @@ cf) https://dreamingdreamer.tistory.com/125
 핵심은 개발자가 new 연산자 등을 통해 객체를 생성할 필요가 없다는 것이다(제어의 역행-IoC).<br>
 개발자 입장에서는 스프링 컨테이너에게 그 참조변수만 일러준다면(@Autowired나 setter주입 등) 스프링이 알아서 객체를 생성해주고, 관계를 맺어준다.<br>
 이를 의존성 주입(DI : dependency Injection)이라고 하며 개발자는 자신의 코드에 필요한 객체를 스프링을 통해 주입받는 구조로 코드를 작성한다. 
+
+
+-----------------------------------------------------------------------
 
 
 ### spring AOP
@@ -103,6 +117,8 @@ j.class 메모리상에 올릴 때 적용
 타겟클래스를 프록시 객체로 감싸서 부가기능을 제공
 
 
+-----------------------------------------------------------------------
+
 
 ### IOC(Inversion of Control, 제어의 역전)란
 IOC(Inversion of Control) : 의존 관계 주입(Dependency Injection)이라고도 하고,<br>
@@ -130,11 +146,15 @@ IOC(Inversion of Control) : 의존 관계 주입(Dependency Injection)이라고�
     * 라이프사이클 인터페이스
 
 
+-----------------------------------------------------------------------
+
 
 ### Filter와 Interceptor 차이
 spring mvc lifecycle와 함께 Filter와 Interceptor에 대해 읽기 편하게 정리된 사이트가 있다.
 : https://velog.io/@damiano1027/Spring-Spring-MVC-Request-Lifecycle
 
+
+-----------------------------------------------------------------------
 
 
 ### spring bean 생명주기
@@ -210,11 +230,18 @@ spring mvc lifecycle와 함께 Filter와 Interceptor에 대해 읽기 편하게 
 14. postProcessAfterInitialization methods of BeanPostProcessors
 
 
+-----------------------------------------------------------------------
 
 
+#spring_bean_scope
 
-
-
+|스코프|설명|
+|------|---------------------------|
+|singletone|Ioc 컨테이너당 빈 인스턴스 하나를 생성|
+|prototype|요청할 때마다 빈 인스턴스를 새로 생성|
+|request|HTTP 요청당 하나의 빈 인스턴스를 생성.(웹 어플리케이션 컨텍스트에만 해당)|
+|session|HTTP 세션당 빈 인스턴스 하나를 생성.(웹 어플리케이션 컨텍스트에만 해당)|
+|globalSession|전역 HTTP 세션당 빈 인스턴스 하나를 생성.(포털 어플리케이션 컨텍스트에만 해당)|
 
 
 
